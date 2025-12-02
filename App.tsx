@@ -114,38 +114,43 @@ const App: React.FC = () => {
     }
   };
 
-  // Optimized Tween Transition (smoother, less laggy than spring)
+  // Optimized Native-like Transition
   const pageVariants: Variants = {
     enter: (direction: number) => ({
-      x: direction > 0 ? '100%' : '-100%',
+      x: direction > 0 ? '100%' : '-100%', // Slide in from side
       opacity: 1,
       position: 'absolute',
-      zIndex: 1,
+      zIndex: 10, // Incoming page on top
       width: '100%',
       top: 0,
       left: 0,
+      scale: 1, // Ensure full scale
+      boxShadow: '0 0 20px rgba(0,0,0,0.1)' // Shadow for depth
     }),
     center: {
       x: '0%',
       opacity: 1,
       zIndex: 1,
-      position: 'relative',
+      position: 'relative', // Reset to relative to allow scrolling
+      scale: 1,
       transition: {
-        duration: 0.35,
-        ease: [0.32, 0.725, 0.25, 1], // iOS-style cubic-bezier
+        x: { type: "spring", stiffness: 300, damping: 35 }, // Snappy spring
+        opacity: { duration: 0.2 }
       }
     },
     exit: (direction: number) => ({
-      x: direction < 0 ? '100%' : '-100%',
-      opacity: 1,
-      zIndex: 0,
+      x: direction < 0 ? '30%' : '-30%', // Parallax exit: move slightly
+      opacity: 0, // Fade out
+      scale: 0.95, // Shrink slightly
+      zIndex: 0, // Behind incoming
       position: 'absolute',
       width: '100%',
       top: 0,
       left: 0,
       transition: {
-        duration: 0.35,
-        ease: [0.32, 0.725, 0.25, 1],
+        x: { type: "spring", stiffness: 300, damping: 35 },
+        opacity: { duration: 0.3 },
+        scale: { duration: 0.3 }
       }
     }),
   };
